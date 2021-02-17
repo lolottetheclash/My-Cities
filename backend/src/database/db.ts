@@ -15,9 +15,11 @@ const mongodbStart = async (): Promise<void> => {
       useCreateIndex: true,
       autoIndex: true,
     });
-    console.log('MongoDB is connected');
+    console.log('MongoDB is connected'.cyan.bold);
   } catch (err) {
-    console.error(`An error occurred during MongoDB connection : ${err}`);
+    console.error(
+      `An error occurred during MongoDB connection : ${err}`.red.bold
+    );
   }
 };
 
