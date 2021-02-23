@@ -13,7 +13,6 @@ const mongodbStart = async (): Promise<void> => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
-      autoIndex: true,
     });
     console.log('MongoDB is connected'.cyan.bold);
   } catch (err) {
