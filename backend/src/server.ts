@@ -4,6 +4,8 @@ import * as dotenv from 'dotenv';
 import mongodbStart from './database/db';
 
 import userRouter from './routes/users';
+import travelRouter from './routes/travels';
+
 import errorHandler from './middlewares/error';
 
 colors.enable();
@@ -18,8 +20,9 @@ mongodbStart();
 // Parse URL
 app.use(express.json());
 
-// Routes
+// Users & Travels Routes
 app.use('/api/users', userRouter);
+app.use('/api/travels', travelRouter);
 
 // Error Handler
 app.use(errorHandler);
