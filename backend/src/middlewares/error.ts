@@ -9,6 +9,7 @@ const errorHandler = (
   next: NextFunction
 ) => {
   let error = { ...err };
+  error.message = err.message;
 
   // Mongoose Bad Id
   if (err.name === 'CastError') {

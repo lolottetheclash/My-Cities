@@ -22,9 +22,8 @@
   "rules": {
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     "no-console": "off",
-    "treatUndefinedAsUnspecified": true,
+    // "treatUndefinedAsUnspecified": true
     "@typescript-eslint/lines-between-class-members": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "consistent-return": [{ "treatUndefinedAsUnspecified": true }]
+    "@typescript-eslint/explicit-module-boundary-types": "off"
   }
 }
