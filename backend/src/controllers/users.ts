@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import ErrorResponse from '../utils/errorResponse';
 import User from '../models/User';
 import asyncHandler from '../middlewares/async';
+import Travel from '../models/Travel';
 
 const getAllUsers = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
@@ -63,6 +64,12 @@ const deleteUser = asyncHandler(
         new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
       );
     } else {
+      // Delete all user's associated travels
+      if (user.travels?.length) {
+        user.travels.map(async (travelId) => {
+          await Travel.findByIdAndDelete(travelId);
+        });
+      }
       res.status(200).json({ success: true, message: 'User deleted' });
     }
   }

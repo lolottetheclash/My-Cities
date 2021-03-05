@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import ErrorResponse from '../utils/errorResponse';
 import Travel from '../models/Travel';
+import User from '../models/User';
 
 import asyncHandler from '../middlewares/async';
 
@@ -34,10 +35,30 @@ const getSingleTravel = asyncHandler(
 );
 
 const createTravel = asyncHandler(
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const travel = await Travel.create(req.body);
-    // ICI: ajouter le travel dans la liste des travels du user
-    res.status(201).json({ success: true, message: 'Travel created', travel });
+    // Chercher l'id dans le futur cookie ou le local storage et non ds le body!
+    // Add created travel to user's travels list
+    const userTravelsUpdated = await User.findByIdAndUpdate(
+      req.body.author,
+      {
+        $push: { travels: travel._id },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!userTravelsUpdated) {
+      next(
+        new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
+      );
+    } else {
+      res
+        .status(201)
+        .json({ success: true, message: 'Travel created', travel });
+    }
   }
 );
 
@@ -62,12 +83,23 @@ const updateTravel = asyncHandler(
 const deleteTravel = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const travel = await Travel.findByIdAndDelete(req.params.id);
-    // ICI: enlever le travel dans la liste des travels du user
     if (!travel) {
       next(
         new ErrorResponse(`Travel not found with id of ${req.params.id}`, 404)
       );
     } else {
+      // Chercher l'id dans le futur cookie ou le local storage et non ds le body!
+      // Remove deleted travel to user's travels list
+      await User.findByIdAndUpdate(
+        req.body.author,
+        {
+          $pull: { travels: travel._id },
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
       res.status(200).json({ success: true, message: 'Travel deleted' });
     }
   }
