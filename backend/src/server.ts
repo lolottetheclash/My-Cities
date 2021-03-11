@@ -1,5 +1,7 @@
 import colors from 'colors';
 import express from 'express';
+import cors from 'cors';
+
 import * as dotenv from 'dotenv';
 import mongodbStart from './database/db';
 
@@ -17,6 +19,9 @@ dotenv.config();
 // Connection to DB
 mongodbStart();
 
+// Allow Cross Origin
+app.use(cors());
+
 // Parse URL
 app.use(express.json());
 
@@ -28,7 +33,7 @@ app.use('/api/travels', travelRouter);
 app.use(errorHandler);
 
 // Express server launch
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`App listening on port ${process.env.PORT} !`.green.bold);
 });
