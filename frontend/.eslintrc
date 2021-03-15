@@ -1,5 +1,6 @@
 {
   "extends": [
+    "react-app",
     "airbnb-typescript",
     "airbnb/hooks",
     "plugin:@typescript-eslint/recommended",
@@ -29,6 +30,7 @@
     },
     "ecmaVersion": 2020,
     "project": "./tsconfig.json",
+
     "sourceType": "module"
   },
   "rules": {

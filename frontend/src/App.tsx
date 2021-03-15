@@ -1,12 +1,10 @@
 import { Router, Route, Switch } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
+import history from 'history/browser';
 
 import LandingPage from './components/landingPage/LandingPage';
 import Travels from './components/travels/Travels';
 
 import './App.css';
-
-const history = createBrowserHistory();
 
 function App(): JSX.Element {
   return (
