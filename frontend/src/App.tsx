@@ -1,19 +1,25 @@
+import React from 'react';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import { Router, Route, Switch } from 'react-router-dom';
 import history from 'history/browser';
 
-import LandingPage from './components/landingPage/LandingPage';
-import Travels from './components/travels/Travels';
+import theme from './Theme';
+
+import LandingPage from './components/LandingPage/LandingPage';
+import Travels from './components/Travels/Travels';
 
 import './App.css';
 
 function App(): JSX.Element {
   return (
-    <Router history={history}>
-      <Switch>
-        <Route exact path="/" component={LandingPage} />
-        <Route path="/travels" component={Travels} />
-      </Switch>
-    </Router>
+    <MuiThemeProvider theme={theme}>
+      <Router history={history}>
+        <Switch>
+          <Route exact path="/" component={LandingPage} />
+          <Route path="/travels" component={Travels} />
+        </Switch>
+      </Router>
+    </MuiThemeProvider>
   );
 }
 

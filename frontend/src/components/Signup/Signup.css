@@ -1,0 +1,24 @@
+body {
+  background-color: #8ccfe3;
+  margin: 0;
+  padding: 0;
+}
+
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+  margin: 0 auto;
+  border: 2px solid;
+  border-radius: 30px;
+  border-color: #4f829e;
+}
+
+.signup-title {
+  color: #4f829e;
+}
+
+.signup-form {
+  width: 200px;
+}
