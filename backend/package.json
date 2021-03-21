@@ -5,10 +5,12 @@
   "main": "server.js",
   "scripts": {
     "start": "npm run dev",
+    "client": "cd ../frontend && npm start",
     "build": "tsc",
     "lint": "eslint . ",
     "fix:lint": "eslint . --fix",
     "dev": "ts-node-dev --transpile-only --respawn  ./src/server.ts",
+    "full-dev": "concurrently \"npm run dev \" \"npm run client\" ",
     "prod": "tsc && node ./built/src/server.js",
     "debug": "tsc && node --inspect ./built/src/server.js"
   },
@@ -24,6 +26,7 @@
   "homepage": "https://github.com/lolottetheclash/My-Cities#readme",
   "dependencies": {
     "colors": "^1.4.0",
+    "concurrently": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
