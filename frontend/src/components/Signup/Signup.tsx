@@ -6,7 +6,7 @@ import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import LockIcon from '@material-ui/icons/Lock';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-import './Signup.css';
+import './SignUp.css';
 import theme from '../../Theme';
 
 // Specific styles for MUI components

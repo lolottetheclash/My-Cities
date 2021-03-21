@@ -5,7 +5,7 @@ import theme from './Theme';
 
 import NavBar from './components/NavBar/NavBar';
 import SignIn from './components/SignIn/SignIn';
-import SignUp from './components/SignUp/Signup';
+import SignUp from './components/SignUp/SignUp';
 
 import LandingPage from './pages/LandingPage/LandingPage';
 import Travels from './pages/Travels/Travels';
