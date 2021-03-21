@@ -1,0 +1,8 @@
+.navbar-container {
+  margin-bottom: 30px;
+}
+
+.navbar-home {
+  display: flex;
+  align-items: center;
+}

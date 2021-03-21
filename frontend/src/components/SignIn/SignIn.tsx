@@ -1,13 +1,12 @@
 import { Link } from 'react-router-dom';
 import { Input, InputAdornment, Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import LockIcon from '@material-ui/icons/Lock';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-import './Signup.css';
 import theme from '../../Theme';
+import './SignIn.css';
 
 // Specific styles for MUI components
 const useStyles = makeStyles({
@@ -35,36 +34,24 @@ const useStyles = makeStyles({
   },
 });
 
-const Signup = (): JSX.Element => {
+const SignIn = (): JSX.Element => {
   const classes = useStyles();
 
   return (
-    <div className="signup-container">
-      <div className="signup-avatar">
+    <div className="signin-container">
+      <div className="signin-avatar">
         <AccountCircleIcon classes={{ root: classes.AccountCircleIcon }} />
       </div>
       <Typography variant="h5" gutterBottom classes={{ root: classes.h5 }}>
-        Sign Up
+        Sign In
       </Typography>
-      <form className="signup-form">
-        <Input
-          classes={{ root: classes.input }}
-          id="input-with-icon-adornment"
-          placeholder="Pseudo"
-          autoComplete="off"
-          fullWidth
-          startAdornment={
-            <InputAdornment position="start" classes={{ root: classes.icon }}>
-              <PersonOutlineIcon />
-            </InputAdornment>
-          }
-        />
+      <form className="signin-form">
         <Input
           classes={{ root: classes.input }}
           id="input-with-icon-adornment"
           placeholder="Email"
-          autoComplete="off"
           fullWidth
+          autoComplete="off"
           startAdornment={
             <InputAdornment position="start" classes={{ root: classes.icon }}>
               <MailOutlineIcon />
@@ -89,14 +76,14 @@ const Signup = (): JSX.Element => {
           fullWidth
           classes={{ root: classes.button }}
         >
-          Sign Up
+          Sign In
         </Button>
-        <div className="signup-account">
+        <div className="signin-account">
           <Typography variant="subtitle2" classes={{ root: classes.subtitle2 }}>
-            Already member?
+            Don't have an account yet?
           </Typography>
-          <Link to="/signin" className="signin-link">
-            Sign In
+          <Link to="/signup" className="signup-link">
+            Sign Up
           </Link>
         </div>
       </form>
@@ -104,4 +91,4 @@ const Signup = (): JSX.Element => {
   );
 };
 
-export default Signup;
+export default SignIn;

@@ -1,4 +1,4 @@
-.signup-container {
+.signin-container {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -9,22 +9,23 @@
   border-radius: 30px;
   border-color: #4f829e;
 }
-.signup-avatar {
+
+.signin-avatar {
   position: absolute;
-  top: -12%;
+  top: -14%;
 }
 
-.signup-form {
+.signin-form {
   width: 250px;
 }
 
-.signup-account {
+.signin-account {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 10px;
 }
-.signin-link {
+.signup-link {
   color: white;
   font-size: 14px;
   text-decoration: none;
