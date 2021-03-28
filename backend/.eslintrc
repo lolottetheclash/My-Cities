@@ -4,6 +4,7 @@
     "node": true
   },
   "extends": [
+    "react-app",
     "airbnb-typescript/base",
     "prettier/@typescript-eslint",
     "plugin:@typescript-eslint/recommended",
@@ -22,7 +23,6 @@
   "rules": {
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     "no-console": "off",
-    // "treatUndefinedAsUnspecified": true
     "@typescript-eslint/lines-between-class-members": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off"
   }
