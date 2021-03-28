@@ -1,17 +1,24 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import { useStores } from '../../stores/index';
 
-const Travels = (): JSX.Element => {
-  const [travels, setTravels] = useState([]);
-  const travelsUrl = 'http://localhost:5000/api/travels';
+const Travels = observer(
+  (): JSX.Element => {
+    const { travelsStore } = useStores();
 
-  useEffect(() => {
-    axios
-      .get(travelsUrl)
-      .then((response) => console.log(response.data.travels));
-  }, []);
-
-  return <h1>Travels Page !!!!</h1>;
-};
+    return (
+      <>
+        <h1>Travels Page !!!!</h1>
+        {travelsStore.isLoading && <h1>Loading Travels...</h1>}
+        <ul>
+          {travelsStore.travels.map((travel) => (
+            <>
+              <li key={1}>{travel.city}</li>
+            </>
+          ))}
+        </ul>
+      </>
+    );
+  }
+);
 
 export default Travels;
