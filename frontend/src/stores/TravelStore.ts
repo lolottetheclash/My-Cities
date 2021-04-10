@@ -19,6 +19,7 @@ class TravelStore {
   @action public fetchTravels(): void {
     this.isLoading = true;
     axios.get(travelsUrl).then((response) => {
+      console.log('lalala ds travelSTore');
       this.setTravels(response.data.travels);
       this.isLoading = false;
     });

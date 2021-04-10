@@ -25,5 +25,6 @@
     "no-console": "off",
     "@typescript-eslint/lines-between-class-members": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off"
-  }
+  },
+  "ignorePatterns": ["src/**/*.js", "src/**/*.jsx"]
 }
