@@ -3,6 +3,7 @@ import { ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Input, InputAdornment, Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import LockIcon from '@material-ui/icons/Lock';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -10,8 +11,8 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 
+import './SignUp.css';
 import theme from '../../Theme';
-import './SignIn.css';
 
 // Specific styles for MUI components
 const useStyles = makeStyles({
@@ -49,7 +50,7 @@ interface ILocalStore {
   setPasswordVisibility: (isVisible: Readonly<boolean>) => void;
 }
 
-const SignIn = observer(
+const LogUp = observer(
   (): JSX.Element => {
     const classes = useStyles();
     const localState: ILocalStore = useLocalObservable(() => ({
@@ -72,30 +73,41 @@ const SignIn = observer(
     };
 
     return (
-      <div className="signin-container">
-        <div className="signin-avatar">
+      <div className="signup-container">
+        <div className="signup-avatar">
           <AccountCircleIcon className={classes.AccountCircleIcon} />
         </div>
         <Typography variant="h5" gutterBottom className={classes.h5}>
-          Sign In
+          Sign Up
         </Typography>
-        <form className="signin-form">
+        <form className="signup-form">
           <Input
             className={classes.input}
             id="input-with-icon-adornment-1"
-            placeholder="Email"
-            fullWidth
+            placeholder="Pseudo"
             autoComplete="off"
+            fullWidth
+            startAdornment={
+              <InputAdornment position="start" className={classes.icon}>
+                <PersonOutlineIcon />
+              </InputAdornment>
+            }
+          />
+          <Input
+            className={classes.input}
+            id="input-with-icon-adornment-2"
+            placeholder="Email"
+            autoComplete="off"
+            fullWidth
             startAdornment={
               <InputAdornment position="start" className={classes.icon}>
                 <MailOutlineIcon />
               </InputAdornment>
             }
           />
-
           <Input
             className={classes.input}
-            id="input-with-icon-adornment-2"
+            id="input-with-icon-adornment-3"
             placeholder="Password"
             fullWidth
             onChange={handlePasswordChange}
@@ -128,14 +140,14 @@ const SignIn = observer(
             fullWidth
             className={classes.button}
           >
-            Sign In
+            Sign Up
           </Button>
-          <div className="signin-account">
+          <div className="signup-account">
             <Typography variant="subtitle2" className={classes.subtitle2}>
-              Don't have an account yet?
+              Already member?
             </Typography>
-            <Link to="/signup" className="signup-link">
-              Sign Up
+            <Link to="/signin" className="signin-link">
+              Sign In
             </Link>
           </div>
         </form>
@@ -144,4 +156,4 @@ const SignIn = observer(
   }
 );
 
-export default SignIn;
+export default LogUp;
