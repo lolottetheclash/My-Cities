@@ -1,11 +1,5 @@
 import { Link } from 'react-router-dom';
-import {
-  AppBar,
-  Button,
-  makeStyles,
-  Toolbar,
-  Typography,
-} from '@material-ui/core';
+import { AppBar, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import './NavBar.css';
 import theme from '../../Theme';

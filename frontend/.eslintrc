@@ -47,5 +47,6 @@
         "endOfLine": "auto"
       }
     ]
-  }
+  },
+  "ignorePatterns": ["src/**/*.js", "src/**/*.jsx"]
 }
