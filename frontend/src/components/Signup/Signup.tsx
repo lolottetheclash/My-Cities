@@ -71,7 +71,7 @@ const SignUp = (): JSX.Element => {
       <form className="signup-form">
         <Input
           className={classes.input}
-          id="input-with-icon-adornment"
+          id="input-with-icon-adornment-1"
           placeholder="Pseudo"
           autoComplete="off"
           fullWidth
@@ -83,7 +83,7 @@ const SignUp = (): JSX.Element => {
         />
         <Input
           className={classes.input}
-          id="input-with-icon-adornment"
+          id="input-with-icon-adornment-2"
           placeholder="Email"
           autoComplete="off"
           fullWidth
@@ -95,7 +95,7 @@ const SignUp = (): JSX.Element => {
         />
         <Input
           className={classes.input}
-          id="input-with-icon-adornment"
+          id="input-with-icon-adornment-3"
           placeholder="Password"
           fullWidth
           onChange={handlePasswordChange}

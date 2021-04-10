@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import TravelStore from './TravelStore';
 import UserStore from './UserStore';
+import TravelStore from './TravelStore';
 
 interface IStoresContext {
   travelsStore: TravelStore;
