@@ -5,7 +5,7 @@ import theme from './Theme';
 
 import NavBar from './components/NavBar/NavBar';
 import SignIn from './components/SignIn/SignIn';
-import SignUp from './components/SignUp/SignUp';
+import LogUp from './components/SignUp/LogUp';
 
 import LandingPage from './pages/LandingPage/LandingPage';
 import Travels from './pages/Travels/Travels';
@@ -19,7 +19,7 @@ function App(): JSX.Element {
           <Route exact path="/" component={LandingPage} />
           <Route path="/travels" component={Travels} />
           <Route path="/signin" component={SignIn} />
-          <Route path="/signup" component={SignUp} />
+          <Route path="/signup" component={LogUp} />
         </Switch>
       </Router>
     </MuiThemeProvider>
