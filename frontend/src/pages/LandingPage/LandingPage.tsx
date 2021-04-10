@@ -5,6 +5,7 @@ import theme from '../../Theme';
 import landing from '../../assets/landing.png';
 
 import './LandingPage.css';
+import { useStores } from '../../stores';
 
 const useStyles = makeStyles({
   h3: {
@@ -19,6 +20,7 @@ const useStyles = makeStyles({
 
 const LandingPage = (): JSX.Element => {
   const classes = useStyles();
+  const { userStore } = useStores();
 
   return (
     <div className="landing-container">
@@ -29,6 +31,7 @@ const LandingPage = (): JSX.Element => {
         Get a head start on your next trips
       </Typography>
       <img src={landing} alt="Landing" className="landing-image" />
+      <p>{userStore.users[0]?.firstName}</p>
     </div>
   );
 };

@@ -70,7 +70,7 @@ const SignIn = (): JSX.Element => {
       <form className="signin-form">
         <Input
           className={classes.input}
-          id="input-with-icon-adornment"
+          id="input-with-icon-adornment-1"
           placeholder="Email"
           fullWidth
           autoComplete="off"
@@ -83,7 +83,7 @@ const SignIn = (): JSX.Element => {
 
         <Input
           className={classes.input}
-          id="input-with-icon-adornment"
+          id="input-with-icon-adornment-2"
           placeholder="Password"
           fullWidth
           onChange={handlePasswordChange}
