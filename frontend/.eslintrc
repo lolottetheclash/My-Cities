@@ -39,11 +39,14 @@
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": 0,
+    "no-console": "off",
+    "lines-between-class-members": "off",
     "prettier/prettier": [
       "error",
       {
         "endOfLine": "auto"
       }
     ]
-  }
+  },
+  "ignorePatterns": ["src/**/*.js", "src/**/*.jsx"]
 }
