@@ -1,13 +1,6 @@
 import axios from 'axios';
 import { action, computed, makeObservable, observable } from 'mobx';
-
-interface IUser {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  travels?: string[];
-}
+import { IUser } from '../constants';
 
 const emptyUser = {
   firstName: '',
@@ -29,7 +22,6 @@ class UserStore {
   @action public fetchUsers(): void {
     this.isLoading = true;
     axios.get(usersUrl).then((response) => {
-      console.log('lalala ds userStore users : ', response.data.users);
       this.setUsers(response.data.users);
       this.isLoading = false;
     });
@@ -40,7 +32,11 @@ class UserStore {
   }
 
   @action public createUser(user: IUser): void {
-    this.users.push(user);
+    this.isLoading = true;
+    axios.post(usersUrl, user).then((response) => {
+      this.users.push(response.data.user);
+      this.isLoading = false;
+    });
   }
 
   @computed get usersLength(): number {
