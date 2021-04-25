@@ -25,9 +25,16 @@
   justify-content: center;
   margin-bottom: 10px;
 }
+
 .signup-link {
   color: white;
   font-size: 14px;
   text-decoration: none;
   margin-left: 7px;
+}
+
+.input-error {
+  color: red;
+  margin: 10px 0 0 15px;
+  font-size: 11px;
 }

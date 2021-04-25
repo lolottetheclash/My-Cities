@@ -1,4 +1,4 @@
-import { observer, useLocalObservable, useObserver } from 'mobx-react-lite';
+import { Observer, useLocalObservable } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 
@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 import { IUser } from '../../constants';
 import { useStores } from '../../stores';
+import SignUpSchema from './SignUpSchema';
 
 import './SignUp.css';
 import theme from '../../Theme';
@@ -30,7 +31,7 @@ const useStyles = makeStyles({
     fontWeight: 'bolder',
   },
   input: {
-    margin: '20px 0',
+    marginTop: '25px',
     color: 'white',
   },
   icon: {
@@ -40,7 +41,7 @@ const useStyles = makeStyles({
     fontSize: '16px',
   },
   button: {
-    margin: '25px 0 15px 0',
+    margin: '35px 0 15px 0',
   },
   subtitle2: {
     color: theme.palette.primary.dark,
@@ -52,45 +53,45 @@ interface ILocalStore {
   setPasswordVisibility: (isVisible: Readonly<boolean>) => void;
 }
 
-const LogUp = observer(
-  (): JSX.Element => {
-    const classes = useStyles();
-    const { userStore } = useStores();
-    const localState: ILocalStore = useLocalObservable(() => ({
-      isPasswordVisible: false,
-      setPasswordVisibility: (isVisible) => {
-        localState.isPasswordVisible = isVisible;
-      },
-    }));
+const LogUp = (): JSX.Element => {
+  const classes = useStyles();
+  const { userStore } = useStores();
+  const localState: ILocalStore = useLocalObservable(() => ({
+    isPasswordVisible: false,
+    setPasswordVisibility: (isVisible) => {
+      localState.isPasswordVisible = isVisible;
+    },
+  }));
 
-    const handlePasswordVisibility = () => {
-      localState.setPasswordVisibility(!localState.isPasswordVisible);
-    };
+  const handlePasswordVisibility = (): void => {
+    localState.setPasswordVisibility(!localState.isPasswordVisible);
+  };
 
-    const handleUserCreation = (user: IUser) => {
-      userStore.createUser(user);
-    };
+  const handleUserCreation = (user: IUser): void => {
+    userStore.createUser(user);
+  };
 
-    return (
-      <div className="signup-container">
-        <div className="signup-avatar">
-          <AccountCircleIcon className={classes.AccountCircleIcon} />
-        </div>
-        <Typography variant="h5" gutterBottom className={classes.h5}>
-          Sign Up
-        </Typography>
-        <Formik
-          initialValues={{
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
-          }}
-          onSubmit={(values) => handleUserCreation(values)}
-        >
-          {({ handleChange, handleSubmit, values, errors, touched, isValid }) =>
-            // if we don't use useObserver here, localState.isPasswordVisible is not observed any more
-            useObserver(() => (
+  return (
+    <div className="signup-container">
+      <div className="signup-avatar">
+        <AccountCircleIcon className={classes.AccountCircleIcon} />
+      </div>
+      <Typography variant="h5" gutterBottom className={classes.h5}>
+        Sign Up
+      </Typography>
+      <Formik
+        initialValues={{
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+        }}
+        validationSchema={SignUpSchema}
+        onSubmit={(values) => handleUserCreation(values)}
+      >
+        {({ handleChange, handleSubmit, errors, touched }) => (
+          <Observer>
+            {() => (
               <div className="signup-form">
                 <Input
                   className={classes.input}
@@ -104,6 +105,9 @@ const LogUp = observer(
                     </InputAdornment>
                   }
                 />
+                {errors.firstName && touched.firstName && (
+                  <p className="input-error">{errors.firstName}</p>
+                )}
                 <Input
                   className={classes.input}
                   id="input-with-icon-adornment-2"
@@ -116,6 +120,9 @@ const LogUp = observer(
                     </InputAdornment>
                   }
                 />
+                {errors.lastName && touched.lastName && (
+                  <p className="input-error">{errors.lastName}</p>
+                )}
                 <Input
                   className={classes.input}
                   id="input-with-icon-adornment-3"
@@ -128,6 +135,9 @@ const LogUp = observer(
                     </InputAdornment>
                   }
                 />
+                {errors.email && touched.email && (
+                  <p className="input-error">{errors.email}</p>
+                )}
                 <Input
                   className={classes.input}
                   id="input-with-icon-adornment-4"
@@ -156,6 +166,10 @@ const LogUp = observer(
                     </InputAdornment>
                   }
                 />
+                {errors.password && touched.password && (
+                  <p className="input-error">{errors.password}</p>
+                )}
+
                 <Button
                   variant="contained"
                   color="primary"
@@ -175,12 +189,11 @@ const LogUp = observer(
                   </Link>
                 </div>
               </div>
-            ))
-          }
-        </Formik>
-      </div>
-    );
-  }
-);
-
+            )}
+          </Observer>
+        )}
+      </Formik>
+    </div>
+  );
+};
 export default LogUp;
