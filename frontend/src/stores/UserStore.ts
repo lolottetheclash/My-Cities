@@ -12,6 +12,10 @@ const emptyUser = {
 
 const usersUrl = 'api/users';
 
+interface IUserCredentials {
+  email: string;
+  password: string;
+}
 
 class UserStore {
   @observable public user: IUser = emptyUser;
@@ -37,9 +41,27 @@ class UserStore {
     axios
       .post(usersUrl, user)
       .then((response) => {
-      this.users.push(response.data.user);
-      this.isLoading = false;
-    });
+        this.users.push(response.data.user);
+        this.isLoading = false;
+      })
+      .catch((err) => {
+        console.log('Error in user creation : ', err.response.data);
+      });
+  }
+
+  @action public logUser(userCredentials: IUserCredentials): void {
+    this.isLoading = true;
+    axios
+      .post(`${usersUrl}/auth`, userCredentials)
+      .then((response) => {
+        // TODOOOOOOOOOO : Gérer ce qu'on renvoie
+        console.log('lalala response in userStore ', response);
+      })
+      .catch((err) => {
+        // TODOOOOOOOOOO : Gérer ce qu'on renvoie
+
+        console.log('lalala error in userStore : ', err.response.data);
+      });
   }
 
   @computed get usersLength(): number {

@@ -12,10 +12,12 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 
+import { useStores } from '../../stores';
 import SignInSchema from './SignInSchema';
 
 import theme from '../../Theme';
 import './SignIn.css';
+import { IUser } from '../../constants';
 
 // Specific styles for MUI components
 const useStyles = makeStyles({
@@ -51,8 +53,14 @@ interface ILocalStore {
   setPasswordVisibility: (isVisible: Readonly<boolean>) => void;
 }
 
+interface ILoginData {
+  email: string;
+  password: string;
+}
+
 const SignIn = (): JSX.Element => {
   const classes = useStyles();
+  const { userStore } = useStores();
   const localState: ILocalStore = useLocalObservable(() => ({
     isPasswordVisible: false,
     setPasswordVisibility: (isVisible) => {
@@ -62,6 +70,13 @@ const SignIn = (): JSX.Element => {
 
   const handlePasswordVisibility = (): void => {
     localState.setPasswordVisibility(!localState.isPasswordVisible);
+  };
+
+  const handleUserLogin = (credentials: ILoginData): void => {
+    console.log('lalala credentials ', credentials);
+    userStore.logUser(credentials);
+    // TODOOOOOOOOOO : que faire so user log ou pas log?
+    // TODOOOOOOOOOO : gérer l'auth à travers l'accès des routes: qui peut accéder à quoi? comment vérifier les routes sachant qu'on a passé l'ID du user dans le token
   };
 
   return (
@@ -78,7 +93,7 @@ const SignIn = (): JSX.Element => {
           password: '',
         }}
         validationSchema={SignInSchema}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(credentials: ILoginData) => handleUserLogin(credentials)}
       >
         {({ handleChange, handleSubmit, errors, touched }) => (
           <Observer>
