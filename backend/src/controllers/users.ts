@@ -1,4 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+
 import ErrorResponse from '../utils/errorResponse';
 import User from '../models/User';
 import asyncHandler from '../middlewares/async';
@@ -35,13 +38,56 @@ const getSingleUser = asyncHandler(
 
 const createUser = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
+    if (!req.body) return;
     const user = await User.create(req.body);
+    // Token creation with user ID
+    const userToken = jwt.sign(
+      { id: user.id },
+      process.env.JWT_SECRET as string
+    );
+    // Set token in user's cookie
+    res.cookie('token', userToken, { httpOnly: true });
     res.status(201).json({ success: true, message: 'User created', user });
   }
 );
 
+const authUser = asyncHandler(
+  async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void | ErrorResponse> => {
+    // TODOOOOOOOOOO : Voir pr factoriser, pt on enlever les if else?
+    if (!req.body) return;
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      next(new ErrorResponse(`User not found`, 404));
+    } else {
+      const match = await bcrypt.compare(req.body.password, user.password);
+      if (!match) {
+        next(new ErrorResponse(`Invalid Password`, 401));
+      } else {
+        // Token creation with user ID
+        const userToken = jwt.sign(
+          { id: user.id },
+          process.env.JWT_SECRET as string
+        );
+        // Set token in user's cookie
+        res.cookie('token', userToken, { httpOnly: true });
+        res.status(200).json({ success: true, message: 'User logged', user });
+      }
+    }
+  }
+);
+
 const updateUser = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void | ErrorResponse> => {
+    // TODOOOOOOOOOO : Mongoose middleware is not invoked on update() operations, so you must use a save() if you want to update user passwords.
+    // si on ft pas le save au lieu du update, a priori cela ne re hashera pas le password: à vérifier
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -74,4 +120,11 @@ const deleteUser = asyncHandler(
     }
   }
 );
-export { createUser, getAllUsers, getSingleUser, updateUser, deleteUser };
+export {
+  createUser,
+  authUser,
+  getAllUsers,
+  getSingleUser,
+  updateUser,
+  deleteUser,
+};

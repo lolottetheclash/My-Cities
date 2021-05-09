@@ -9,7 +9,7 @@ interface ITravel {
   author: string[];
 }
 
-const travelsUrl = 'http://localhost:5000/api/travels';
+const travelsUrl = 'api/travels';
 
 class TravelStore {
   @observable public travels: ITravel[] = [];

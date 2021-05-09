@@ -26,7 +26,7 @@ const errorHandler = (
   // Finally send the response with custom error
   res.status(error.statusCode || 500).json({
     success: false,
-    message: error.message || 'Server error',
+    error: error.message || 'Server error',
   });
 };
 

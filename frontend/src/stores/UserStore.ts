@@ -1,13 +1,6 @@
 import axios from 'axios';
 import { action, computed, makeObservable, observable } from 'mobx';
-
-interface IUser {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  travels?: string[];
-}
+import { IUser } from '../constants';
 
 const emptyUser = {
   firstName: '',
@@ -17,7 +10,12 @@ const emptyUser = {
   travels: [],
 };
 
-const usersUrl = 'http://localhost:5000/api/users';
+const usersUrl = 'api/users';
+
+interface IUserCredentials {
+  email: string;
+  password: string;
+}
 
 class UserStore {
   @observable public user: IUser = emptyUser;
@@ -29,7 +27,6 @@ class UserStore {
   @action public fetchUsers(): void {
     this.isLoading = true;
     axios.get(usersUrl).then((response) => {
-      console.log('lalala ds userStore users : ', response.data.users);
       this.setUsers(response.data.users);
       this.isLoading = false;
     });
@@ -40,7 +37,31 @@ class UserStore {
   }
 
   @action public createUser(user: IUser): void {
-    this.users.push(user);
+    this.isLoading = true;
+    axios
+      .post(usersUrl, user)
+      .then((response) => {
+        this.users.push(response.data.user);
+        this.isLoading = false;
+      })
+      .catch((err) => {
+        console.log('Error in user creation : ', err.response.data);
+      });
+  }
+
+  @action public logUser(userCredentials: IUserCredentials): void {
+    this.isLoading = true;
+    axios
+      .post(`${usersUrl}/auth`, userCredentials)
+      .then((response) => {
+        // TODOOOOOOOOOO : Gérer ce qu'on renvoie
+        console.log('lalala response in userStore ', response);
+      })
+      .catch((err) => {
+        // TODOOOOOOOOOO : Gérer ce qu'on renvoie
+
+        console.log('lalala error in userStore : ', err.response.data);
+      });
   }
 
   @computed get usersLength(): number {
