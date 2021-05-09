@@ -1,6 +1,7 @@
 import colors from 'colors';
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 import * as dotenv from 'dotenv';
 import mongodbStart from './database/db';
@@ -21,6 +22,9 @@ mongodbStart();
 
 // Allow Cross Origin
 app.use(cors());
+
+// Allow to parse cookies
+app.use(cookieParser());
 
 // Parse URL
 app.use(express.json());

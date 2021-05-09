@@ -10,7 +10,8 @@ const emptyUser = {
   travels: [],
 };
 
-const usersUrl = 'http://localhost:5000/api/users';
+const usersUrl = 'api/users';
+
 
 class UserStore {
   @observable public user: IUser = emptyUser;
@@ -33,7 +34,9 @@ class UserStore {
 
   @action public createUser(user: IUser): void {
     this.isLoading = true;
-    axios.post(usersUrl, user).then((response) => {
+    axios
+      .post(usersUrl, user)
+      .then((response) => {
       this.users.push(response.data.user);
       this.isLoading = false;
     });
