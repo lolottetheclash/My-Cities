@@ -22,7 +22,11 @@ class UserStore {
 
   @observable public users: IUser[] = [];
 
+  @observable public isUserLogged = false;
+
   @observable public isLoading = false;
+
+  @observable public error: string | null = null;
 
   @action public fetchUsers(): void {
     this.isLoading = true;
@@ -30,10 +34,6 @@ class UserStore {
       this.setUsers(response.data.users);
       this.isLoading = false;
     });
-  }
-
-  @action setUsers(users: IUser[]): void {
-    this.users = users;
   }
 
   @action public createUser(user: IUser): void {
@@ -49,19 +49,31 @@ class UserStore {
       });
   }
 
-  @action public logUser(userCredentials: IUserCredentials): void {
+  @action public async logUser(
+    userCredentials: IUserCredentials
+  ): Promise<void> {
     this.isLoading = true;
-    axios
+    await axios
       .post(`${usersUrl}/auth`, userCredentials)
-      .then((response) => {
-        // TODOOOOOOOOOO : Gérer ce qu'on renvoie
-        console.log('lalala response in userStore ', response);
+      .then((res) => {
+        this.setUserLoggingStatus(true);
       })
       .catch((err) => {
-        // TODOOOOOOOOOO : Gérer ce qu'on renvoie
-
-        console.log('lalala error in userStore : ', err.response.data);
+        this.setUserLoggingStatus(false);
+        this.setError(err.response.data.error);
       });
+  }
+
+  @action public setError(error: string | null): void {
+    this.error = error;
+  }
+
+  @action private setUsers(users: IUser[]): void {
+    this.users = users;
+  }
+
+  @action private setUserLoggingStatus(isLogged: boolean): void {
+    this.isUserLogged = isLogged;
   }
 
   @computed get usersLength(): number {

@@ -1,6 +1,5 @@
 import { Observer, useLocalObservable } from 'mobx-react-lite';
-import { ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Formik } from 'formik';
 
 import { Input, InputAdornment, Button, Typography } from '@material-ui/core';
@@ -14,10 +13,10 @@ import IconButton from '@material-ui/core/IconButton';
 
 import { useStores } from '../../stores';
 import SignInSchema from './SignInSchema';
+import SnackBar from '../SnackBar/SnackBar';
 
 import theme from '../../Theme';
 import './SignIn.css';
-import { IUser } from '../../constants';
 
 // Specific styles for MUI components
 const useStyles = makeStyles({
@@ -51,6 +50,7 @@ const useStyles = makeStyles({
 interface ILocalStore {
   isPasswordVisible: boolean;
   setPasswordVisibility: (isVisible: Readonly<boolean>) => void;
+  signInError: string | null;
 }
 
 interface ILoginData {
@@ -61,22 +61,25 @@ interface ILoginData {
 const SignIn = (): JSX.Element => {
   const classes = useStyles();
   const { userStore } = useStores();
+  const history = useHistory();
   const localState: ILocalStore = useLocalObservable(() => ({
     isPasswordVisible: false,
     setPasswordVisibility: (isVisible) => {
       localState.isPasswordVisible = isVisible;
     },
+    signInError: null,
   }));
 
   const handlePasswordVisibility = (): void => {
     localState.setPasswordVisibility(!localState.isPasswordVisible);
   };
 
-  const handleUserLogin = (credentials: ILoginData): void => {
+  const handleUserLogin = async (credentials: ILoginData): Promise<void> => {
     console.log('lalala credentials ', credentials);
-    userStore.logUser(credentials);
-    // TODOOOOOOOOOO : que faire so user log ou pas log?
-    // TODOOOOOOOOOO : gérer l'auth à travers l'accès des routes: qui peut accéder à quoi? comment vérifier les routes sachant qu'on a passé l'ID du user dans le token
+    await userStore.logUser(credentials);
+    if (userStore.isUserLogged) {
+      history.push('/travels');
+    }
   };
 
   return (
@@ -169,6 +172,16 @@ const SignIn = (): JSX.Element => {
           </Observer>
         )}
       </Formik>
+      <Observer>
+        {() => (
+          <SnackBar
+            open={Boolean(userStore.error)}
+            message={userStore.error}
+            severity="error"
+            onClose={() => userStore.setError(null)}
+          />
+        )}
+      </Observer>
     </div>
   );
 };
