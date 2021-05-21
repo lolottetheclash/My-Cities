@@ -1,14 +1,6 @@
 import axios from 'axios';
 import { action, computed, makeObservable, observable } from 'mobx';
-import { IUser } from '../constants';
-
-const emptyUser = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  password: '',
-  travels: [],
-};
+import { IUser, IUserLogged } from '../constants';
 
 const usersUrl = 'api/users';
 
@@ -18,7 +10,7 @@ interface IUserCredentials {
 }
 
 class UserStore {
-  @observable public user: IUser = emptyUser;
+  @observable public currentUser: IUserLogged | null = null;
 
   @observable public users: IUser[] = [];
 
@@ -59,11 +51,27 @@ class UserStore {
     this.isLoading = true;
     await axios
       .post(`${usersUrl}/auth`, userCredentials)
-      .then(() => {
+      .then((response) => {
         this.setUserLoggingStatus(true);
+        this.setCurrentUser(response.data.user);
       })
       .catch((err) => {
         this.setUserLoggingStatus(false);
+        this.setError(err.response.data.error);
+      });
+  }
+
+  @action public async logOutUser(userId: string): Promise<void> {
+    this.isLoading = true;
+    await axios
+      .post(`${usersUrl}/logOut`, { id: userId })
+      .then(() => {
+        console.log('lalala then');
+        this.setUserLoggingStatus(false);
+        this.setCurrentUser(null);
+      })
+      .catch((err) => {
+        this.setUserLoggingStatus(true);
         this.setError(err.response.data.error);
       });
   }
@@ -76,7 +84,11 @@ class UserStore {
     this.users = users;
   }
 
-  @action private setUserLoggingStatus(isLogged: boolean): void {
+  @action private setCurrentUser(user: IUserLogged | null): void {
+    this.currentUser = user;
+  }
+
+  @action public setUserLoggingStatus(isLogged: boolean): void {
     this.isUserLogged = isLogged;
   }
 

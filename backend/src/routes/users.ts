@@ -6,6 +6,7 @@ import {
   updateUser,
   deleteUser,
   authUser,
+  logOut,
 } from '../controllers/users';
 
 const userRouter = express.Router();
@@ -16,5 +17,6 @@ userRouter.post('/', createUser);
 userRouter.post('/auth', authUser);
 userRouter.put('/:id', updateUser);
 userRouter.delete('/:id', deleteUser);
+userRouter.post('/logOut', logOut);
 
 export default userRouter;

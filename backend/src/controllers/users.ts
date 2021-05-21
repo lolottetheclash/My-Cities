@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
 
 import ErrorResponse from '../utils/errorResponse';
 import User from '../models/User';
@@ -40,13 +41,6 @@ const createUser = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
     if (!req.body) return;
     const user = await User.create(req.body);
-    // Token creation with user ID
-    const userToken = jwt.sign(
-      { id: user.id },
-      process.env.JWT_SECRET as string
-    );
-    // Set token in user's cookie
-    res.cookie('token', userToken, { httpOnly: true });
     res.status(201).json({ success: true, message: 'User created', user });
   }
 );
@@ -67,13 +61,24 @@ const authUser = asyncHandler(
       if (!match) {
         next(new ErrorResponse(`Invalid Password`, 401));
       } else {
-        // Token creation with user ID
+        // Token creation with user ID +> en a t on vraiment besoin? avec l'id ds les params de l'url plus l'id de session ds le cookie/DB, ça devrait suffire sans usertoken?
         const userToken = jwt.sign(
           { id: user.id },
           process.env.JWT_SECRET as string
         );
-        // Set token in user's cookie
+        // Token creation with session ID
+        const sessionToken = jwt.sign(
+          { session: uuidv4() },
+          process.env.JWT_SECRET as string
+        );
+
+        // Update user with its uuid session
+        user.sessionUuid = sessionToken;
+        user.save();
+
+        // Set tokens in user's cookie
         res.cookie('token', userToken, { httpOnly: true });
+        res.cookie('sessionId', sessionToken, { httpOnly: true });
         res.status(200).json({ success: true, message: 'User logged', user });
       }
     }
@@ -120,6 +125,28 @@ const deleteUser = asyncHandler(
     }
   }
 );
+
+const logOut = asyncHandler(
+  async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void | ErrorResponse> => {
+    const user = await User.findById(req.body.id);
+    if (!user) {
+      next(
+        new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
+      );
+    } else {
+      res.clearCookie('token');
+      res.clearCookie('sessionId');
+      user.sessionUuid = null;
+      user.save();
+      res.status(200).json({ success: true });
+    }
+  }
+);
+
 export {
   createUser,
   authUser,
@@ -127,4 +154,5 @@ export {
   getSingleUser,
   updateUser,
   deleteUser,
+  logOut,
 };
