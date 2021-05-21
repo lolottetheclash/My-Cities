@@ -24,6 +24,8 @@ class UserStore {
 
   @observable public isUserLogged = false;
 
+  @observable public isUserCreated = false;
+
   @observable public isLoading = false;
 
   @observable public error: string | null = null;
@@ -36,16 +38,18 @@ class UserStore {
     });
   }
 
-  @action public createUser(user: IUser): void {
+  @action public async createUser(user: IUser): Promise<void> {
     this.isLoading = true;
-    axios
+    await axios
       .post(usersUrl, user)
       .then((response) => {
         this.users.push(response.data.user);
+        this.setUserCreatedStatus(true);
         this.isLoading = false;
       })
       .catch((err) => {
-        console.log('Error in user creation : ', err.response.data);
+        this.setUserCreatedStatus(false);
+        this.setError(err.response.data.error);
       });
   }
 
@@ -55,7 +59,7 @@ class UserStore {
     this.isLoading = true;
     await axios
       .post(`${usersUrl}/auth`, userCredentials)
-      .then((res) => {
+      .then(() => {
         this.setUserLoggingStatus(true);
       })
       .catch((err) => {
@@ -74,6 +78,10 @@ class UserStore {
 
   @action private setUserLoggingStatus(isLogged: boolean): void {
     this.isUserLogged = isLogged;
+  }
+
+  @action public setUserCreatedStatus(isCreated: boolean): void {
+    this.isUserCreated = isCreated;
   }
 
   @computed get usersLength(): number {
