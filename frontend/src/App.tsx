@@ -9,6 +9,7 @@ import LogUp from './components/SignUp/LogUp';
 
 import LandingPage from './pages/LandingPage/LandingPage';
 import Travels from './pages/Travels/Travels';
+import NewTravel from './pages/newTravel/newTravel';
 
 function App(): JSX.Element {
   return (
@@ -17,6 +18,7 @@ function App(): JSX.Element {
         <NavBar />
         <Switch>
           <Route exact path="/" component={LandingPage} />
+          <Route path="/travels/new" component={NewTravel} />
           <Route path="/travels" component={Travels} />
           <Route path="/signin" component={SignIn} />
           <Route path="/signup" component={LogUp} />

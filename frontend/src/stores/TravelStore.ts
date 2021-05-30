@@ -1,13 +1,20 @@
 import axios from 'axios';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-interface ITravel {
+export interface ITravel {
   title: string;
   city: string;
   description: string;
   pictures?: string[];
-  author: string[];
+  author: string;
 }
+
+export type TravelProp =
+  | 'title'
+  | 'city'
+  | 'description'
+  | 'pictures'
+  | 'author';
 
 const travelsUrl = 'api/travels';
 
