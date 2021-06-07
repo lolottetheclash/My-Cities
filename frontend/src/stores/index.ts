@@ -1,19 +1,19 @@
 import React, { useContext } from 'react';
-import UserStore from './UserStore';
-import TravelStore from './TravelStore';
+import { travelStore, TravelStore } from './TravelStore';
+import { userStore, UserStore } from './UserStore';
 
-interface IStoresContext {
-  travelsStore: TravelStore;
+interface IStores {
+  travelStore: TravelStore;
   userStore: UserStore;
 }
 
-const stores = {
-  travelsStore: new TravelStore(),
-  userStore: new UserStore(),
+export const stores: IStores = {
+  travelStore,
+  userStore,
 };
 
 export const AppContext = React.createContext(stores);
 
-export const useStores = (): IStoresContext => {
+export const useStores = (): IStores => {
   return useContext(AppContext);
 };

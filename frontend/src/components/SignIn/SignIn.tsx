@@ -62,6 +62,7 @@ const SignIn = observer(
   (): JSX.Element => {
     const classes = useStyles();
     const { userStore } = useStores();
+    console.log('is user logged ', userStore.isUserLogged);
     const history = useHistory();
     const localState: ILocalStore = useLocalObservable(() => ({
       isPasswordVisible: false,

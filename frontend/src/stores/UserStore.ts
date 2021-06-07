@@ -9,7 +9,7 @@ interface IUserCredentials {
   password: string;
 }
 
-class UserStore {
+export class UserStore {
   @observable public currentUser: IUserLogged | null = null;
 
   @observable public users: IUser[] = [];
@@ -49,11 +49,13 @@ class UserStore {
     userCredentials: IUserCredentials
   ): Promise<void> {
     this.isLoading = true;
+
     await axios
       .post(`${usersUrl}/auth`, userCredentials)
       .then((response) => {
         this.setUserLoggingStatus(true);
         this.setCurrentUser(response.data.user);
+        console.log('lalala user logged ', this.isUserLogged);
       })
       .catch((err) => {
         this.setUserLoggingStatus(false);
@@ -62,6 +64,8 @@ class UserStore {
   }
 
   @action public async logOutUser(userId: string): Promise<void> {
+    console.log('lalala logout');
+
     this.isLoading = true;
     await axios
       .post(`${usersUrl}/logOut`, { id: userId })
@@ -103,7 +107,8 @@ class UserStore {
   constructor() {
     this.fetchUsers();
     makeObservable(this);
+    console.log('on repasse ici');
   }
 }
 
-export default UserStore;
+export const userStore = new UserStore();

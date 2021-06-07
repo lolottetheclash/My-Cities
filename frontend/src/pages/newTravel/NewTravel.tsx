@@ -13,8 +13,8 @@ import { PhotoCamera } from '@material-ui/icons';
 
 import { ITravel, TravelProp } from '../../stores/TravelStore';
 
-import './newTravel.css';
-
+import './NewTravel.css';
+// Move MUI styles
 const useStyles = makeStyles({
   title: { width: '300px', marginTop: '30px ' },
   description: {

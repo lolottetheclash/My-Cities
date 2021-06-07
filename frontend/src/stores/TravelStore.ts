@@ -18,7 +18,7 @@ export type TravelProp =
 
 const travelsUrl = 'api/travels';
 
-class TravelStore {
+export class TravelStore {
   @observable public travels: ITravel[] = [];
 
   @observable public isLoading = false;
@@ -49,4 +49,4 @@ class TravelStore {
   }
 }
 
-export default TravelStore;
+export const travelStore = new TravelStore();
