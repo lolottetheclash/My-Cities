@@ -21,7 +21,6 @@ import { useStores } from './stores/index';
 
 const PrivateRoute: React.FC<RouteProps> = observer(({ children, path }) => {
   const { userStore } = useStores();
-  console.log('is user logged ', userStore.isUserLogged);
 
   return (
     <Route
@@ -36,7 +35,6 @@ const PrivateRoute: React.FC<RouteProps> = observer(({ children, path }) => {
 
 function App(): JSX.Element {
   const { userStore } = useStores();
-  console.log('is user logged ', userStore.isUserLogged);
   return (
     <MuiThemeProvider theme={theme}>
       <Router>
@@ -47,7 +45,9 @@ function App(): JSX.Element {
           <PrivateRoute path="/travels/new">
             <NewTravel />
           </PrivateRoute>
-          <Route path="/signin" component={SignIn} />
+          <Route path="/signin">
+            {userStore.isUserLogged ? <Redirect to="/" /> : <SignIn />}
+          </Route>
           <Route path="/signup" component={SignUp} />
         </Switch>
       </Router>

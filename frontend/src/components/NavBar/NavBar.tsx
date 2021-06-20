@@ -43,9 +43,8 @@ const NavBar = observer(
               <Link
                 to="/"
                 onClick={() =>
-                  userStore.currentUser &&
-                  // eslint-disable-next-line no-underscore-dangle
-                  userStore.logOutUser(userStore.currentUser._id)
+                  userStore.currentUserId &&
+                  userStore.logOutUser(userStore.currentUserId)
                 }
                 style={{ textDecoration: 'none', color: 'white' }}
               >

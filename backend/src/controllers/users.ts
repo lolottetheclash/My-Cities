@@ -61,12 +61,13 @@ const authUser = asyncHandler(
       if (!match) {
         next(new ErrorResponse(`Invalid Password`, 401));
       } else {
-        const userSessionToken = jwt.sign(
-          { id: user.id },
-          process.env.JWT_SECRET as string
-        );
-        
-        res.status(200).json({ success: true, message: 'User logged', user, userSessionToken });
+        const userSession = user.id;
+
+        res.status(200).json({
+          success: true,
+          message: 'User logged',
+          userSession,
+        });
       }
     }
   }
@@ -125,9 +126,6 @@ const logOut = asyncHandler(
         new ErrorResponse(`User not found with id of ${req.params.id}`, 404)
       );
     } else {
-      res.clearCookie('token');
-      res.clearCookie('sessionId');
-      user.save();
       res.status(200).json({ success: true });
     }
   }

@@ -3,7 +3,7 @@ import { useStores } from '../../stores/index';
 
 const Travels = observer(
   (): JSX.Element => {
-    const { travelStore, userStore } = useStores();
+    const { travelStore } = useStores();
 
     return (
       <>

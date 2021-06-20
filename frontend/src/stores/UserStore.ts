@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { action, computed, makeObservable, observable } from 'mobx';
-import { IUser, IUserLogged } from '../constants';
+import { IUser } from '../constants';
 
 const usersUrl = 'api/users';
 
@@ -10,9 +10,9 @@ interface IUserCredentials {
 }
 
 export class UserStore {
-  @observable public currentUser: IUserLogged | null = null;
-
   @observable public users: IUser[] = [];
+
+  @observable public currentUserId: string | null = localStorage.userSession;
 
   @observable public isUserLogged = !!localStorage.userSession;
 
@@ -21,6 +21,10 @@ export class UserStore {
   @observable public isLoading = false;
 
   @observable public error: string | null = null;
+
+  @action setCurrentUserId = (id: string | null): void => {
+    this.currentUserId = id;
+  };
 
   @action public fetchUsers(): void {
     this.setLoadingStatus(true);
@@ -53,12 +57,11 @@ export class UserStore {
       .post(`${usersUrl}/auth`, userCredentials)
       .then((response) => {
         this.setUserLoggingStatus(true);
-        this.setCurrentUser(response.data.user);
+        this.setCurrentUserId(response.data.userSession);
         this.setLoadingStatus(false);
-        localStorage.setItem('userSession', response.data.userSessionToken);
+        localStorage.setItem('userSession', response.data.userSession);
       })
       .catch((err) => {
-        this.setUserLoggingStatus(false);
         this.setError(err.response.data.error);
       });
   }
@@ -69,13 +72,12 @@ export class UserStore {
       .post(`${usersUrl}/logOut`, { id: userId })
       .then(() => {
         this.setUserLoggingStatus(false);
-        this.setCurrentUser(null);
+        this.setCurrentUserId(null);
         this.setLoadingStatus(false);
 
         localStorage.removeItem('userSession');
       })
       .catch((err) => {
-        this.setUserLoggingStatus(true);
         this.setError(err.response.data.error);
       });
   }
@@ -86,10 +88,6 @@ export class UserStore {
 
   @action private setUsers(users: IUser[]): void {
     this.users = users;
-  }
-
-  @action private setCurrentUser(user: IUserLogged | null): void {
-    this.currentUser = user;
   }
 
   @action private setLoadingStatus(isLoading: boolean) {

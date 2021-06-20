@@ -5,7 +5,3 @@ export interface IUser {
   password: string;
   travels?: string[];
 }
-
-export interface IUserLogged extends IUser {
-  _id: string;
-}
