@@ -1,4 +1,4 @@
-import { observer, useObserver } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 

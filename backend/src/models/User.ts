@@ -8,7 +8,6 @@ export interface IUser extends mongoose.Document {
   lastName: string;
   email: string;
   password: string;
-  sessionUuid?: string | null;
   travels?: ITravel['_id'][];
 }
 
@@ -17,7 +16,6 @@ const UserSchema = new mongoose.Schema<IUser>({
   lastName: { type: String, required: true, trim: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, trim: true },
-  sessionUuid: { type: String },
   travels: [
     {
       type: mongoose.Schema.Types.ObjectId,

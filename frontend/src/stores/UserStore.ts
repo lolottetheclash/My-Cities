@@ -9,12 +9,12 @@ interface IUserCredentials {
   password: string;
 }
 
-class UserStore {
+export class UserStore {
   @observable public currentUser: IUserLogged | null = null;
 
   @observable public users: IUser[] = [];
 
-  @observable public isUserLogged = false;
+  @observable public isUserLogged = !!localStorage.userSession;
 
   @observable public isUserCreated = false;
 
@@ -23,21 +23,21 @@ class UserStore {
   @observable public error: string | null = null;
 
   @action public fetchUsers(): void {
-    this.isLoading = true;
+    this.setLoadingStatus(true);
     axios.get(usersUrl).then((response) => {
       this.setUsers(response.data.users);
-      this.isLoading = false;
+      this.setLoadingStatus(false);
     });
   }
 
   @action public async createUser(user: IUser): Promise<void> {
-    this.isLoading = true;
+    this.setLoadingStatus(true);
     await axios
       .post(usersUrl, user)
       .then((response) => {
         this.users.push(response.data.user);
         this.setUserCreatedStatus(true);
-        this.isLoading = false;
+        this.setLoadingStatus(false);
       })
       .catch((err) => {
         this.setUserCreatedStatus(false);
@@ -48,12 +48,14 @@ class UserStore {
   @action public async logUser(
     userCredentials: IUserCredentials
   ): Promise<void> {
-    this.isLoading = true;
+    this.setLoadingStatus(true);
     await axios
       .post(`${usersUrl}/auth`, userCredentials)
       .then((response) => {
         this.setUserLoggingStatus(true);
         this.setCurrentUser(response.data.user);
+        this.setLoadingStatus(false);
+        localStorage.setItem('userSession', response.data.userSessionToken);
       })
       .catch((err) => {
         this.setUserLoggingStatus(false);
@@ -62,13 +64,15 @@ class UserStore {
   }
 
   @action public async logOutUser(userId: string): Promise<void> {
-    this.isLoading = true;
+    this.setLoadingStatus(true);
     await axios
       .post(`${usersUrl}/logOut`, { id: userId })
       .then(() => {
-        console.log('lalala then');
         this.setUserLoggingStatus(false);
         this.setCurrentUser(null);
+        this.setLoadingStatus(false);
+
+        localStorage.removeItem('userSession');
       })
       .catch((err) => {
         this.setUserLoggingStatus(true);
@@ -88,6 +92,10 @@ class UserStore {
     this.currentUser = user;
   }
 
+  @action private setLoadingStatus(isLoading: boolean) {
+    this.isLoading = isLoading;
+  }
+
   @action public setUserLoggingStatus(isLogged: boolean): void {
     this.isUserLogged = isLogged;
   }
@@ -101,9 +109,9 @@ class UserStore {
   }
 
   constructor() {
-    this.fetchUsers();
     makeObservable(this);
+    this.fetchUsers();
   }
 }
 
-export default UserStore;
+export const userStore = new UserStore();

@@ -61,25 +61,12 @@ const authUser = asyncHandler(
       if (!match) {
         next(new ErrorResponse(`Invalid Password`, 401));
       } else {
-        // Token creation with user ID +> en a t on vraiment besoin? avec l'id ds les params de l'url plus l'id de session ds le cookie/DB, ça devrait suffire sans usertoken?
-        const userToken = jwt.sign(
+        const userSessionToken = jwt.sign(
           { id: user.id },
           process.env.JWT_SECRET as string
         );
-        // Token creation with session ID
-        const sessionToken = jwt.sign(
-          { session: uuidv4() },
-          process.env.JWT_SECRET as string
-        );
-
-        // Update user with its uuid session
-        user.sessionUuid = sessionToken;
-        user.save();
-
-        // Set tokens in user's cookie
-        res.cookie('token', userToken, { httpOnly: true });
-        res.cookie('sessionId', sessionToken, { httpOnly: true });
-        res.status(200).json({ success: true, message: 'User logged', user });
+        
+        res.status(200).json({ success: true, message: 'User logged', user, userSessionToken });
       }
     }
   }
@@ -140,7 +127,6 @@ const logOut = asyncHandler(
     } else {
       res.clearCookie('token');
       res.clearCookie('sessionId');
-      user.sessionUuid = null;
       user.save();
       res.status(200).json({ success: true });
     }

@@ -1,0 +1,16 @@
+.stepper-container {
+  display: flex;
+  justify-content: center;
+}
+
+.stepper {
+  width: 60%;
+}
+
+.stepper-buttons {
+  margin-top: 30px;
+}
+
+.MuiStepLabel-labelContainer span {
+  font-size: 20px;
+}
