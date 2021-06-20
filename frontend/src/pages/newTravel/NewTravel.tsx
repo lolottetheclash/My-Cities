@@ -45,7 +45,16 @@ interface ILocalState {
   setActiveStep: (step: number) => void;
   travel: ITravel;
   setTravel: (label: TravelProp, value: string) => void;
+  resetTravel: () => void;
 }
+
+const travelDefaultValues: ITravel = {
+  title: '',
+  city: '',
+  description: '',
+  pictures: [],
+  author: '',
+};
 
 const NewTravel = observer(
   (): JSX.Element => {
@@ -55,19 +64,16 @@ const NewTravel = observer(
       setActiveStep: (step) => {
         localState.activeStep = step;
       },
-      travel: {
-        title: '',
-        city: '',
-        description: '',
-        pictures: [],
-        author: '',
-      },
+      travel: travelDefaultValues,
       setTravel: (label, value) => {
         if (label === 'pictures') {
           localState.travel.pictures?.push(value);
         } else {
           localState.travel[label] = value;
         }
+      },
+      resetTravel: () => {
+        localState.travel = travelDefaultValues;
       },
     }));
 
@@ -87,6 +93,7 @@ const NewTravel = observer(
                 placeholder="Title"
                 onChange={handleChange('title')}
                 className={classes.title}
+                value={localState.travel.title}
               />
               <Input
                 id="description-input"
@@ -95,6 +102,7 @@ const NewTravel = observer(
                 multiline
                 rows="5"
                 className={classes.description}
+                value={localState.travel.description}
               />
             </div>
           );
@@ -132,10 +140,12 @@ const NewTravel = observer(
 
     const handleReset = () => {
       localState.setActiveStep(0);
+      localState.resetTravel();
     };
 
     const handleSave = () => {
       console.log('save');
+      // Relier à la DB
     };
 
     return (
