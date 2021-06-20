@@ -4,7 +4,6 @@ import { useStores } from '../../stores/index';
 const Travels = observer(
   (): JSX.Element => {
     const { travelStore, userStore } = useStores();
-    console.log('lalala in travels ', userStore.isUserLogged);
 
     return (
       <>
@@ -13,7 +12,7 @@ const Travels = observer(
         <ul>
           {travelStore.travels.map((travel) => (
             <>
-              <li key={1}>{travel.city}</li>
+              <li key={travel.title}>{travel.city}</li>
             </>
           ))}
         </ul>

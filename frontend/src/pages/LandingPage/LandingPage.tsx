@@ -23,7 +23,6 @@ const LandingPage = observer(
   (): JSX.Element => {
     const classes = useStyles();
     const { userStore } = useStores();
-    console.log('lalala landing', userStore.isUserLogged);
 
     return (
       <div className="landing-container">

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
 import { AppBar, makeStyles, Toolbar, Typography } from '@material-ui/core';
@@ -24,7 +24,11 @@ const useStyles = makeStyles({
 const NavBar = observer(
   (): JSX.Element => {
     const classes = useStyles();
+    const location = useLocation();
     const { userStore } = useStores();
+    const isUrl = (pathname: string): boolean => {
+      return location.pathname === pathname;
+    };
     return (
       <div className="navbar-container">
         <AppBar position="static" classes={{ root: classes.AppBar }}>
@@ -48,12 +52,14 @@ const NavBar = observer(
                 <Typography variant="subtitle1">Logout</Typography>
               </Link>
             ) : (
-              <Link
-                to="/signin"
-                style={{ textDecoration: 'none', color: 'white' }}
-              >
-                <Typography variant="subtitle1">Login</Typography>
-              </Link>
+              !isUrl('/signin') && (
+                <Link
+                  to="/signin"
+                  style={{ textDecoration: 'none', color: 'white' }}
+                >
+                  <Typography variant="subtitle1">Login</Typography>
+                </Link>
+              )
             )}
           </Toolbar>
         </AppBar>

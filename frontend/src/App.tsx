@@ -20,9 +20,6 @@ import NewTravel from './pages/NewTravel/NewTravel';
 import { useStores } from './stores/index';
 
 const PrivateRoute: React.FC<RouteProps> = observer(({ children, path }) => {
-  // console.log('lalala sessionId : ', localStorage.get('sessionId'));
-  console.log('lalala token : ', document.cookie);
-
   const { userStore } = useStores();
   console.log('is user logged ', userStore.isUserLogged);
 
